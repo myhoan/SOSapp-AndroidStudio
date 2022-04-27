@@ -1,0 +1,12 @@
+SOS application used to send messages to loved ones in case of emergency. The application is suitable for all ages, especially children and the elderly
+- Where children are alone at home when there is no parent and there is an intruder, or they are kidnapped.
+- In case the elderly have underlying medical conditions, heart disease or sudden relapsing diseases need emergency care when alone.
+
+We make an emergency call application with different options on the phone to activate the application running in the background:
+- The user presses the power button 5 times
+- The user impacts a sudden change of acceleration like throwing a phone.
+- User shakes phone 10 times.
+
+Once the app is activated, the message is automatically sent to the emergency contact. There are 2 cases sent:
+- When the user is in a place without internet and GPS, the message is only sent as a request for help
+- When the user is in a place with internet and GPS, the message will send the current location.
