@@ -5,23 +5,19 @@ public class ContactModel {
     private String phoneNo;
     private String name;
 
-    //constructor
     public ContactModel(int id,String name, String phoneNo) {
         this.id=id;
         this.phoneNo = validate(phoneNo);
         this.name = name;
     }
 
-    //validate the phone number, and reformat is necessary
     private String validate(String phone){
         //creating StringBuilder for both the cases
         StringBuilder case1=new StringBuilder("");
         StringBuilder case2=new StringBuilder("");
 
-        //check if the string already has a "+"
         if(phone.charAt(0)!='+'){
             for(int i=0; i<phone.length(); i++){
-                //remove any spaces or "-"
                 if(phone.charAt(i)!='-' && phone.charAt(i)!=' '){
                     case1.append(phone.charAt(i));
                 }
@@ -29,7 +25,6 @@ public class ContactModel {
             return case1.toString();
         }else{
             for(int i=0; i<phone.length(); i++){
-                //remove any spaces or "-"
                 if(phone.charAt(i)!='-' || phone.charAt(i)!=' '){
                     case2.append(phone.charAt(i));
                 }
