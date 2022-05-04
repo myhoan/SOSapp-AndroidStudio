@@ -12,7 +12,6 @@ public class ContactModel {
     }
 
     private String validate(String phone){
-        //creating StringBuilder for both the cases
         StringBuilder case1=new StringBuilder("");
         StringBuilder case2=new StringBuilder("");
 

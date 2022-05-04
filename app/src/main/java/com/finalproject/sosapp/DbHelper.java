@@ -13,16 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DbHelper extends SQLiteOpenHelper {
-    // Database Version
     private static final int DATABASE_VERSION = 1;
-
-    // Database Name
     private static final String DATABASE_NAME = "contactdata";
-
-    // Country table name
     private static final String TABLE_NAME= "contacts";
-
-    // Country Table Columns names
     private static final String KEY_ID = "id";
     private static final String NAME = "Name";
     private static final String PHONENO = "PhoneNo";
@@ -47,7 +40,6 @@ public class DbHelper extends SQLiteOpenHelper {
 
     }
 
-    //method to add the contact
     public void addcontact(ContactModel contact){
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues c=new ContentValues();
@@ -57,7 +49,6 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    //method to retrieve all the contacts in List
     public List<ContactModel> getAllContacts(){
         List<ContactModel> list=new ArrayList<>();
         String query="SELECT * FROM "+TABLE_NAME;
@@ -73,7 +64,6 @@ public class DbHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    //get the count of data, this will allow user to not add more that five contacts in database
     public int count(){
         int count=0;
         String query="SELECT COUNT(*) FROM "+TABLE_NAME;
@@ -87,7 +77,6 @@ public class DbHelper extends SQLiteOpenHelper {
         return count;
     }
 
-    // Deleting single country
     public void deleteContact(ContactModel contact) {
         SQLiteDatabase db = this.getWritableDatabase();
         int i=db.delete(TABLE_NAME,KEY_ID + " = ?",
