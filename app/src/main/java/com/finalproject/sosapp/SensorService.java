@@ -70,7 +70,7 @@ public class SensorService extends Service {
             @SuppressLint("MissingPermission")
             @Override
             public void onShake(int count) {
-                if(count==9) {
+                if(count==10) {
                     vibrate();
                     FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
                     fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, new CancellationToken() {
