@@ -5,9 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-
-import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +16,6 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String KEY_ID = "id";
     private static final String NAME = "Name";
     private static final String PHONENO = "PhoneNo";
-
 
     public DbHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
