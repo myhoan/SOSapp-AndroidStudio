@@ -30,6 +30,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 
 import java.util.List;
+import com.finalproject.sosapp.R;
+import com.finalproject.sosapp.ContactModel;
+import com.finalproject.sosapp.DbHelper;
 
 public class SensorService extends Service {
 
