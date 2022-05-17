@@ -18,7 +18,7 @@
             android:orientation="vertical">
             <TextView
                 android:text="Name"
-                android:textColor="@color/design_default_color_secondary"
+                android:textColor="@color/design_default_color_on_secondary"
                 style="@style/TextAppearance.AppCompat.Medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
 
             <TextView
                 android:text="Phone"
-                android:textColor="@color/design_default_color_secondary_variant"
+                android:textColor="@color/design_default_color_on_secondary"
                 style="@style/TextAppearance.AppCompat.Large"
                 android:textStyle="bold"
                 android:layout_width="match_parent"

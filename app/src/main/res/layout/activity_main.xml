@@ -14,7 +14,7 @@
         android:layout_margin="12dp"
         android:background="#0F9D58"
         android:text="Add Emergency Contact "
-        android:textColor="#FFFFFF" />
+        android:textColor="@color/yellow_50" />
 
     <ListView
         android:layout_width="match_parent"
