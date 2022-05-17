@@ -30,9 +30,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 
 import java.util.List;
-import com.finalproject.sosapp.R;
-import com.finalproject.sosapp.ContactModel;
-import com.finalproject.sosapp.DbHelper;
 
 public class SensorService extends Service {
 
@@ -59,71 +56,76 @@ public class SensorService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Log.i("Sensor Service", "On create start foreground");
             startMyOwnForeground();
-        else
+        }
+        else {
+            Log.i("Sensor Service", "On create start foreground");
             startForeground(1, new Notification());
 
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mAccelerometer = mSensorManager
-                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mShakeDetector = new ShakeDetector();
-        mShakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
+            mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+            mAccelerometer = mSensorManager
+                    .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            mShakeDetector = new ShakeDetector();
+            mShakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
 
-            @SuppressLint("MissingPermission")
-            @Override
-            public void onShake(int count) {
-                if(count==10) {
-                    vibrate();
-                    FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
-                    fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, new CancellationToken() {
-                        @Override
-                        public boolean isCancellationRequested() {
-                            return false;
-                        }
-                        @NonNull
-                        @Override
-                        public CancellationToken onCanceledRequested(@NonNull OnTokenCanceledListener onTokenCanceledListener) {
-                            return null;
-                        }
-                    }).addOnSuccessListener(new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            if(location!=null){
-                                SmsManager smsManager = SmsManager.getDefault();
-                                DbHelper db=new DbHelper(SensorService.this);
-                                List<ContactModel> list=db.getAllContacts();
-                                for(ContactModel c: list){
-                                    String message = c.getName()+"I am in DANGER. Please help me. Here are my coordinates.\n "+"http://maps.google.com/?q=" + location.getLatitude() + "," + location.getLongitude();
-                                    smsManager.sendTextMessage(c.getPhoneNo(), null, message, null, null);
+                @SuppressLint("MissingPermission")
+                @Override
+                public void onShake(int count) {
+                    if (count == 10) {
+                        vibrate();
+                        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
+                        fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, new CancellationToken() {
+                            @Override
+                            public boolean isCancellationRequested() {
+                                return false;
+                            }
+
+                            @NonNull
+                            @Override
+                            public CancellationToken onCanceledRequested(@NonNull OnTokenCanceledListener onTokenCanceledListener) {
+                                return null;
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                if (location != null) {
+                                    SmsManager smsManager = SmsManager.getDefault();
+                                    DbHelper db = new DbHelper(SensorService.this);
+                                    List<ContactModel> list = db.getAllContacts();
+                                    for (ContactModel c : list) {
+                                        String message = c.getName() + "I am in DANGER. Please help me. Here are my coordinates.\n " + "http://maps.google.com/?q=" + location.getLatitude() + "," + location.getLongitude();
+                                        smsManager.sendTextMessage(c.getPhoneNo(), null, message, null, null);
+                                    }
+                                } else {
+                                    String message = "I am in DANGER. Please help me.\n" + "GPS was turned off. Couldn't find location. Call your nearest Police Station.";
+                                    SmsManager smsManager = SmsManager.getDefault();
+                                    DbHelper db = new DbHelper(SensorService.this);
+                                    List<ContactModel> list = db.getAllContacts();
+                                    for (ContactModel c : list) {
+                                        smsManager.sendTextMessage(c.getPhoneNo(), null, message, null, null);
+                                    }
                                 }
-                            }else{
-                                String message= "I am in DANGER. Please help me.\n"+"GPS was turned off. Couldn't find location. Call your nearest Police Station.";
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("Check: ", "OnFailure");
+                                String message = ", I am in DANGER. Please help me.\n" + "GPS was turned off. Couldn't find location. Call your nearest Police Station.";
                                 SmsManager smsManager = SmsManager.getDefault();
-                                DbHelper db=new DbHelper(SensorService.this);
-                                List<ContactModel> list=db.getAllContacts();
-                                for(ContactModel c: list){
+                                DbHelper db = new DbHelper(SensorService.this);
+                                List<ContactModel> list = db.getAllContacts();
+                                for (ContactModel c : list) {
                                     smsManager.sendTextMessage(c.getPhoneNo(), null, message, null, null);
                                 }
                             }
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("Check: ","OnFailure");
-                            String message= ", I am in DANGER. Please help me.\n"+"GPS was turned off. Couldn't find location. Call your nearest Police Station.";
-                            SmsManager smsManager = SmsManager.getDefault();
-                            DbHelper db=new DbHelper(SensorService.this);
-                            List<ContactModel> list=db.getAllContacts();
-                            for(ContactModel c: list){
-                                smsManager.sendTextMessage(c.getPhoneNo(), null, message, null, null);
-                            } }
-                    });
+                        });
 
+                    }
                 }
-            }
-        });
-
+            });
+        }
         mSensorManager.registerListener(mShakeDetector, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
     }
 
