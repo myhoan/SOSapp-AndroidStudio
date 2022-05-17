@@ -19,6 +19,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SOSapp">
 
+        <service android:name=".PlayerService"/>
+        <service
+            android:name=".SensorService"
+            android:enabled="true"
+            android:exported="true" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">

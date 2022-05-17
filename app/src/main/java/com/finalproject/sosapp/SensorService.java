@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.location.Location;
@@ -55,15 +56,96 @@ public class SensorService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Log.i("Sensor Service", "On create start foreground");
+//        String channelID = "";
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            Log.i("Sensor Service", "On create start foreground");
+//            CharSequence name = "Channel";
+//            String description = "";
+//            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+//            NotificationChannel channel = new NotificationChannel(channelID, name, importance);
+//            channel.setDescription(description);
+//
+//            // Don't see these lines in your code...
+//            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+//            notificationManager.createNotificationChannel(channel);
+//            startMyOwnForeground();
+//            Log.i("Sensor Service", "if statement ");
+//            startMyOwnForeground();
+//
+//        }
+//        else
+//            Log.i("Sensor Service", "else statement ");
+//            startForeground(1, new Notification());
+//
+//            mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+//            mAccelerometer = mSensorManager
+//                    .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+//            mShakeDetector = new ShakeDetector();
+//            mShakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
+//
+//                @SuppressLint("MissingPermission")
+//                @Override
+//                public void onShake(int count) {
+//                    if (count == 10) {
+//                        vibrate();
+//                        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
+//                        fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, new CancellationToken() {
+//                            @Override
+//                            public boolean isCancellationRequested() {
+//                                return false;
+//                            }
+//
+//                            @NonNull
+//                            @Override
+//                            public CancellationToken onCanceledRequested(@NonNull OnTokenCanceledListener onTokenCanceledListener) {
+//                                return null;
+//                            }
+//                        }).addOnSuccessListener(new OnSuccessListener<Location>() {
+//                            @Override
+//                            public void onSuccess(Location location) {
+//                                if (location != null) {
+//                                    SmsManager smsManager = SmsManager.getDefault();
+//                                    DbHelper db = new DbHelper(SensorService.this);
+//                                    List<ContactModel> list = db.getAllContacts();
+//                                    for (ContactModel c : list) {
+//                                        String message = c.getName() + "\n I am in DANGER. Please help me. Here are my coordinates.\n " + "http://maps.google.com/?q=" + location.getLatitude() + "," + location.getLongitude();
+//                                        smsManager.sendTextMessage(c.getPhoneNo(), null, message, null, null);
+//                                    }
+//                                } else {
+//                                    String message = "I am in DANGER. Please help me.\n" + "GPS was turned off. Couldn't find location. Call your nearest Police Station.";
+//                                    SmsManager smsManager = SmsManager.getDefault();
+//                                    DbHelper db = new DbHelper(SensorService.this);
+//                                    List<ContactModel> list = db.getAllContacts();
+//                                    for (ContactModel c : list) {
+//                                        smsManager.sendTextMessage(c.getPhoneNo(), null, message, null, null);
+//                                    }
+//                                }
+//                            }
+//                        }).addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                Log.d("Check: ", "OnFailure");
+//                                String message = ", I am in DANGER. Please help me.\n" + "GPS was turned off. Couldn't find location. Call your nearest Police Station.";
+//                                SmsManager smsManager = SmsManager.getDefault();
+//                                DbHelper db = new DbHelper(SensorService.this);
+//                                List<ContactModel> list = db.getAllContacts();
+//                                for (ContactModel c : list) {
+//                                    smsManager.sendTextMessage(c.getPhoneNo(), null, message, null, null);
+//                                }
+//                            }
+//                        });
+//
+//                    }
+//                }
+//            });
+//            mSensorManager.registerListener(mShakeDetector, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             startMyOwnForeground();
-        }
-        else {
-            Log.i("Sensor Service", "On create start foreground");
+        else{
             startForeground(1, new Notification());
 
+            // ???
             mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
             mAccelerometer = mSensorManager
                     .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -95,7 +177,7 @@ public class SensorService extends Service {
                                     DbHelper db = new DbHelper(SensorService.this);
                                     List<ContactModel> list = db.getAllContacts();
                                     for (ContactModel c : list) {
-                                        String message = c.getName() + "I am in DANGER. Please help me. Here are my coordinates.\n " + "http://maps.google.com/?q=" + location.getLatitude() + "," + location.getLongitude();
+                                        String message = c.getName() + "\n I am in DANGER. Please help me. Here are my coordinates.\n " + "http://maps.google.com/?q=" + location.getLatitude() + "," + location.getLongitude();
                                         smsManager.sendTextMessage(c.getPhoneNo(), null, message, null, null);
                                     }
                                 } else {
@@ -125,8 +207,8 @@ public class SensorService extends Service {
                     }
                 }
             });
+            mSensorManager.registerListener(mShakeDetector, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
         }
-        mSensorManager.registerListener(mShakeDetector, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
     }
 
     public void vibrate(){
@@ -145,21 +227,38 @@ public class SensorService extends Service {
     @RequiresApi(Build.VERSION_CODES.O)
     private void startMyOwnForeground()
     {
-        String NOTIFICATION_CHANNEL_ID = "example.permanence";
-        String channelName = "Background Service";
-        NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_MIN);
-
+//        String NOTIFICATION_CHANNEL_ID = "example.permanence";
+//        String channelName = "Background Service";
+//        NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_MIN);
+//
+//        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        assert manager != null;
+//        manager.createNotificationChannel(chan);
+//
+//        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+//        Notification notification = notificationBuilder.setOngoing(true)
+//                .setContentTitle("You are protected.")
+//                .setContentText("We are there for you")
+//
+//                .setSmallIcon(R.drawable.ic_launcher_foreground)
+//
+//                .setPriority(NotificationManager.IMPORTANCE_MIN)
+//                .setCategory(Notification.CATEGORY_SERVICE)
+//                .build();
+//        startForeground(2, notification);
+        String NOTIFICATION_CHANNEL_ID = "com.example.simpleapp";
+        String channelName = "My Background Service";
+        NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
+        chan.setLightColor(Color.BLUE);
+        chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         assert manager != null;
         manager.createNotificationChannel(chan);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
         Notification notification = notificationBuilder.setOngoing(true)
-                .setContentTitle("You are protected.")
-                .setContentText("We are there for you")
-
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-
+                .setContentTitle("App is running in background")
                 .setPriority(NotificationManager.IMPORTANCE_MIN)
                 .setCategory(Notification.CATEGORY_SERVICE)
                 .build();

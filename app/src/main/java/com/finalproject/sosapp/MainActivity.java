@@ -85,6 +85,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+// player
+//
+        startService(new Intent(this, PlayerService.class));
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
